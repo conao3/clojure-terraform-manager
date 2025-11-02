@@ -1,30 +1,30 @@
 # sample/01_lambda
 
-terraform-managerの基本的な使い方を示すサンプルです。シンプルなAWS Lambda関数を作成します。
+Basic example demonstrating how to use terraform-manager. This sample creates a simple AWS Lambda function.
 
-## 前提条件
+## Prerequisites
 
-- AWS CLIの設定が完了していること（`aws configure`）
-- Terraformがインストールされていること
-- terraform-managerがビルドされていること
+- AWS CLI configured (`aws configure`)
+- Terraform installed
+- terraform-manager built
 
-## リソース
+## Resources
 
-このサンプルでは以下のAWSリソースを作成します：
+This sample creates the following AWS resources:
 
-- Lambda関数（Python 3.12ランタイム）
-- Lambda実行用のIAMロール
-- 基本的な実行ポリシー
+- Lambda function (Python 3.12 runtime)
+- IAM role for Lambda execution
+- Basic execution policy
 
-## デフォルト設定ファイル
+## Default Configuration File
 
-terraform-managerは `~/.config/terraform-manager/default.yaml` を読み込みます：
+terraform-manager reads `~/.config/terraform-manager/default.yaml`:
 
 ```yaml
 terraform_dir: /path/to/clojure-terraform-manager/sample/01_lambda
 ```
 
-または、絶対パスで指定：
+Or specify with absolute path:
 
 ```bash
 mkdir -p ~/.config/terraform-manager
@@ -33,81 +33,81 @@ terraform_dir: $PWD
 EOF
 ```
 
-## 使い方
+## Usage
 
-### 1. デフォルト設定を使う場合
+### 1. Using default configuration
 
 ```bash
-# 設定ファイルを作成
+# Create configuration file
 mkdir -p ~/.config/terraform-manager
 cat > ~/.config/terraform-manager/default.yaml <<EOF
 terraform_dir: $(pwd)
 EOF
 
-# dry-runで確認
+# Dry-run
 terraform-manager switch -n
 
-# 実行
+# Execute
 terraform-manager switch
 ```
 
-### 2. コマンドラインでディレクトリを指定する場合
+### 2. Specifying directory via command-line
 
 ```bash
-# dry-runで確認
+# Dry-run
 terraform-manager switch -f sample/01_lambda -n
 
-# 実行
+# Execute
 terraform-manager switch -f sample/01_lambda
 ```
 
-### 3. 直接Terraformコマンドを使う場合
+### 3. Using Terraform commands directly
 
 ```bash
 cd sample/01_lambda
 
-# 初期化
+# Initialize
 terraform init
 
-# プラン確認
+# Check plan
 terraform plan
 
-# 適用
+# Apply
 terraform apply
 
-# 削除
+# Destroy
 terraform destroy
 ```
 
-## 変数のカスタマイズ
+## Customizing Variables
 
-変数を上書きする場合は、`terraform.tfvars`を作成します：
+To override variables, create `terraform.tfvars`:
 
 ```hcl
 aws_region    = "us-east-1"
 function_name = "my-custom-function-name"
 ```
 
-## 期待される出力
+## Expected Output
 
 ```
 function_arn  = "arn:aws:lambda:ap-northeast-1:123456789012:function:terraform-manager-sample-function"
 function_name = "terraform-manager-sample-function"
 ```
 
-## クリーンアップ
+## Cleanup
 
-作成したリソースを削除する場合：
+To destroy created resources:
 
 ```bash
 cd sample/01_lambda
 terraform destroy
 ```
 
-または
+Or
 
 ```bash
 terraform-manager destroy -f sample/01_lambda
 ```
 
-（destroy コマンドは今後実装予定）
+(destroy command to be implemented)
