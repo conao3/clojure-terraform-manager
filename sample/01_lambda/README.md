@@ -18,18 +18,18 @@ terraform-managerの基本的な使い方を示すサンプルです。シンプ
 
 ## デフォルト設定ファイル
 
-terraform-managerは `~/.config/terraform-manager/default.edn` を読み込みます：
+terraform-managerは `~/.config/terraform-manager/default.yaml` を読み込みます：
 
-```clojure
-{:terraform-dir "/path/to/clojure-terraform-manager/sample/01_lambda"}
+```yaml
+terraform_dir: /path/to/clojure-terraform-manager/sample/01_lambda
 ```
 
 または、絶対パスで指定：
 
 ```bash
 mkdir -p ~/.config/terraform-manager
-cat > ~/.config/terraform-manager/default.edn <<EOF
-{:terraform-dir "$PWD"}
+cat > ~/.config/terraform-manager/default.yaml <<EOF
+terraform_dir: $PWD
 EOF
 ```
 
@@ -40,7 +40,9 @@ EOF
 ```bash
 # 設定ファイルを作成
 mkdir -p ~/.config/terraform-manager
-echo "{:terraform-dir \"$(pwd)\"}" > ~/.config/terraform-manager/default.edn
+cat > ~/.config/terraform-manager/default.yaml <<EOF
+terraform_dir: $(pwd)
+EOF
 
 # dry-runで確認
 terraform-manager switch -n

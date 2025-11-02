@@ -7,7 +7,7 @@ Terraform configuration manager with home-manager style switch functionality.
 ### Basic Usage
 
 ```bash
-# Use default configuration from ~/.config/terraform-manager/default.edn
+# Use default configuration from ~/.config/terraform-manager/default.yaml
 terraform-manager switch
 
 # Specify terraform directory
@@ -22,10 +22,10 @@ terraform-manager switch -v
 
 ### Configuration File
 
-Create `~/.config/terraform-manager/default.edn`:
+Create `~/.config/terraform-manager/default.yaml`:
 
-```clojure
-{:terraform-dir "/path/to/terraform/dir"}
+```yaml
+terraform_dir: /path/to/terraform/dir
 ```
 
 ### Samples
