@@ -3,3 +3,5 @@
 /terraform.tfstate
 /terraform.tfstate.backup
 /lambda_function.zip
+/config.tf.json
+/.direnv

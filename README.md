@@ -1,6 +1,6 @@
 # clojure-terraform-manager
 
-Terraform configuration manager with home-manager style switch functionality.
+Terraform configuration manager with home-manager style switch functionality. Define your infrastructure in Nix language using terranix, then deploy with a single command.
 
 ## Usage
 
@@ -26,11 +26,20 @@ Create `~/.config/terraform-manager/default.yaml`:
 
 ```yaml
 terraform_dir: /path/to/terraform/dir
+nix_file: config.nix  # optional, uses terranix to convert Nix to Terraform
 ```
 
 ### Samples
 
-See [sample/01_lambda](sample/01_lambda/README.md) for a complete example of deploying an AWS Lambda function
+See [sample/01_lambda](sample/01_lambda/README.md) for a complete example of deploying an AWS Lambda function using Nix/terranix
+
+## Features
+
+- **Nix-based Configuration**: Write infrastructure as code using Nix language via terranix
+- **home-manager Style**: Familiar interface for NixOS users
+- **Automatic Conversion**: Converts Nix to Terraform JSON automatically
+- **Type Safety**: Leverage Nix's type system for infrastructure definitions
+- **Reproducible**: Nix ensures consistent deployments across environments
 
 ## Development
 

@@ -1,12 +1,12 @@
 # sample/01_lambda
 
-Basic example demonstrating how to use terraform-manager. This sample creates a simple AWS Lambda function.
+Basic example demonstrating how to use terraform-manager with Nix/terranix. This sample creates a simple AWS Lambda function using Nix language that gets converted to Terraform.
 
 ## Prerequisites
 
+- Nix with flakes enabled
 - AWS CLI configured (`aws configure`)
-- Terraform installed
-- terraform-manager built
+- terraform-manager built (for future use)
 
 ## Resources
 
@@ -16,34 +16,39 @@ This sample creates the following AWS resources:
 - IAM role for Lambda execution
 - Basic execution policy
 
-## Default Configuration File
+## Configuration
 
-terraform-manager reads `~/.config/terraform-manager/default.yaml`:
-
-```yaml
-terraform_dir: /path/to/clojure-terraform-manager/sample/01_lambda
-```
-
-Or specify with absolute path:
-
-```bash
-mkdir -p ~/.config/terraform-manager
-cat > ~/.config/terraform-manager/default.yaml <<EOF
-terraform_dir: $PWD
-EOF
-```
+The infrastructure is defined in `config.nix` using Nix language (terranix). This gets converted to Terraform JSON at build time.
 
 ## Usage
 
-### 1. Using default configuration
+### 1. Using Nix Flakes (Recommended)
 
 ```bash
-# Create configuration file
-mkdir -p ~/.config/terraform-manager
-cat > ~/.config/terraform-manager/default.yaml <<EOF
-terraform_dir: $(pwd)
-EOF
+cd sample/01_lambda
 
+# Check what will be created (dry-run)
+nix run ".#plan"
+
+# Deploy the infrastructure
+nix run ".#apply"
+
+# Destroy the infrastructure
+nix run ".#destroy"
+```
+
+### 2. Using terraform-manager (Future)
+
+Create `~/.config/terraform-manager/default.yaml`:
+
+```yaml
+terraform_dir: /path/to/clojure-terraform-manager/sample/01_lambda
+nix_file: config.nix
+```
+
+Then run:
+
+```bash
 # Dry-run
 terraform-manager switch -n
 
@@ -51,22 +56,18 @@ terraform-manager switch -n
 terraform-manager switch
 ```
 
-### 2. Specifying directory via command-line
-
-```bash
-# Dry-run
-terraform-manager switch -f sample/01_lambda -n
-
-# Execute
-terraform-manager switch -f sample/01_lambda
-```
-
-### 3. Using Terraform commands directly
+### 3. Manual Conversion and Apply
 
 ```bash
 cd sample/01_lambda
 
-# Initialize
+# Enter development shell
+nix develop
+
+# Generate Terraform JSON from Nix
+terranix config.nix > config.tf.json
+
+# Initialize Terraform
 terraform init
 
 # Check plan
@@ -79,14 +80,24 @@ terraform apply
 terraform destroy
 ```
 
+## Development
+
+Enter the development shell to get terraform and terranix:
+
+```bash
+nix develop
+```
+
+Build the Terraform JSON configuration:
+
+```bash
+nix build
+cat result
+```
+
 ## Customizing Variables
 
-To override variables, create `terraform.tfvars`:
-
-```hcl
-aws_region    = "us-east-1"
-function_name = "my-custom-function-name"
-```
+To override variables, you can modify `config.nix` or create a separate `variables.nix` file and import it.
 
 ## Expected Output
 
@@ -95,19 +106,18 @@ function_arn  = "arn:aws:lambda:ap-northeast-1:123456789012:function:terraform-m
 function_name = "terraform-manager-sample-function"
 ```
 
-## Cleanup
+## Why Nix/terranix?
 
-To destroy created resources:
+Using Nix language for Terraform provides several benefits:
 
-```bash
-cd sample/01_lambda
-terraform destroy
-```
+- **Type safety**: Nix's type system catches errors early
+- **Modularity**: Easy to split configurations into reusable modules
+- **Composition**: Import and compose multiple configuration files
+- **Functions**: Use Nix functions to reduce duplication
+- **Reproducibility**: Nix ensures consistent builds across environments
 
-Or
+## File Structure
 
-```bash
-terraform-manager destroy -f sample/01_lambda
-```
-
-(destroy command to be implemented)
+- `config.nix` - Infrastructure definition in Nix language
+- `flake.nix` - Nix flake for building and deploying
+- `.gitignore` - Ignore generated files
