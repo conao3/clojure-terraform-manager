@@ -1,4 +1,12 @@
-# clojure-terraform-manager
+<p align="center"><img src="docs/assets/banner.png" alt="clojure-terraform-manager: A command-line tool that applies Terraform configurations in a declarative way" width="880"></p>
+
+<p align="center"><strong>A command-line tool that applies Terraform configurations in a declarative way</strong></p>
+
+<p align="center"><a href="https://github.com/conao3/clojure-terraform-manager/stargazers"><img src="https://img.shields.io/github/stars/conao3/clojure-terraform-manager?style=flat" alt="GitHub stars"></a></p>
+
+<p align="center"><a href="#installation">Installation</a> | <a href="#usage">Usage</a> | <a href="#license">License</a></p>
+
+<h1>clojure-terraform-manager</h1>
 
 A Terraform configuration manager written in Clojure, inspired by home-manager's declarative switch functionality.
 
